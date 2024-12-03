@@ -101,41 +101,45 @@ public class thirdActvity2 extends AppCompatActivity {
         MTimeRunning = false;
         startBtn.setText("Start");
     }
-    private void startTimer(){
-        final CharSequence value1 = mtextview.getText();
-        String num1 = value1.toString();
-        String num2 = value1.toString();
-        String num3 = value1.toString();
+    private void startTimer() {
+        String timerText = mtextview.getText().toString(); // Get the timer text
+        String[] timeParts = timerText.split(":"); // Split into minutes and seconds
+        int minutes = Integer.parseInt(timeParts[0]);
+        int seconds = Integer.parseInt(timeParts[1]);
 
-        final int number = Integer.valueOf(num2)*60 + Integer.valueOf(num3);
-        MTimeLeftInMills = number*1000;
-        countDownTimer = new CountDownTimer(MTimeLeftInMills,1000) {
+        int totalSeconds = minutes * 60 + seconds; // Calculate total seconds
+        MTimeLeftInMills = totalSeconds * 1000; // Convert to milliseconds
+
+        countDownTimer = new CountDownTimer(MTimeLeftInMills, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                MTimeLeftInMills=millisUntilFinished;
-                updateTimer();
+                MTimeLeftInMills = millisUntilFinished; // Update time left
+                updateTimer(); // Update the UI
             }
 
             @Override
             public void onFinish() {
-                int newValue = Integer.valueOf(buttonValue)+1;
-                if(newValue<=7){
-                    Intent intent = new Intent(thirdActvity2.this,thirdActvity2.class);
+                // Handle transition to the next activity
+                int newValue = Integer.parseInt(buttonValue) + 1;
+                if (newValue <= 7) {
+                    Intent intent = new Intent(thirdActvity2.this, thirdActvity2.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("value",String.valueOf(newValue));
+                    intent.putExtra("value", String.valueOf(newValue));
                     startActivity(intent);
-                }else{
-                    newValue=1;
-                    Intent intent = new Intent(thirdActvity2.this,thirdActvity2.class);
+                } else {
+                    newValue = 1;
+                    Intent intent = new Intent(thirdActvity2.this, thirdActvity2.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.putExtra("value",String.valueOf(newValue));
+                    intent.putExtra("value", String.valueOf(newValue));
                     startActivity(intent);
                 }
             }
         }.start();
+
         startBtn.setText("Pause");
         MTimeRunning = true;
     }
+
     private void updateTimer(){
         int minutes = (int) MTimeLeftInMills/60000;
         int seconds = (int) MTimeLeftInMills%60000/1000;
