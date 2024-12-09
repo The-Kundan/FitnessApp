@@ -24,6 +24,17 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("shared_prefs", Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
+
+        if (username != null) {
+            // User is already logged in, redirect to MainActivity
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish(); // Close LoginActivity
+            return; // Avoid executing further code
+        }
+
         setContentView(R.layout.activity_login);
 
 
@@ -49,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                         // saving our data with key and value
                         editor.apply();
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        finish();
                     }else {
                         Toast.makeText(getApplicationContext(), "Invalid Username and Password", Toast.LENGTH_SHORT).show();
                     }
